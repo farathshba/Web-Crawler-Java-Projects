@@ -37,23 +37,30 @@ public class notifier
 		bodyOfEmail = "";
 	}
 	
-	public void assign() throws MessagingException, AddressException
+	public void assign()
 	{
-		if(bodyOfEmail.contains("http"))
+		try
 		{
-			System.out.println("\n\n 2nd ===> get Mail Session..");
-			getMailSession = Session.getDefaultInstance(mailServerProperties, null);
-			generateMailMessage = new MimeMessage(getMailSession);
-			
-			for(int i =0; i < recipients.size(); i++)
+			if(bodyOfEmail.contains("http"))
 			{
-				generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(recipients.get(i)));
-			}
-			generateMailMessage.setSubject(subjectOfEmail);
-			//	String emailBody = "Test email by Crunchify.com JavaMail API example. " + "<br><br> Regards, <br>Crunchify Admin";
+				System.out.println("\n\n 2nd ===> get Mail Session..");
+				getMailSession = Session.getDefaultInstance(mailServerProperties, null);
+				generateMailMessage = new MimeMessage(getMailSession);
 			
-			generateMailMessage.setContent(bodyOfEmail, "text/html");
-			System.out.println("Mail Session has been created successfully..");
+				for(int i =0; i < recipients.size(); i++)
+				{
+					generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(recipients.get(i)));
+				}
+				generateMailMessage.setSubject(subjectOfEmail);
+				//	String emailBody = "Test email by Crunchify.com JavaMail API example. " + "<br><br> Regards, <br>Crunchify Admin";
+			
+				generateMailMessage.setContent(bodyOfEmail, "text/html");
+				System.out.println("Mail Session has been created successfully..");
+			}
+		}
+		catch(Exception e)
+		{
+			System.err.println(e.getMessage() + " caught @ notifier class in assign method");
 		}
 	}
 	
@@ -77,7 +84,7 @@ public class notifier
 			catch (MessagingException me)
 			{
 				flag = false;
-				System.err.println(me.getLocalizedMessage() + " mother fucking error punked!");
+				System.err.println(me.getMessage() + " caught @ notifier class in sendmail method");
 			}
 		}
 		

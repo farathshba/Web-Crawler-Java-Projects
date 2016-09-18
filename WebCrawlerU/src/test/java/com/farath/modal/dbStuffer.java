@@ -8,14 +8,14 @@ public class dbStuffer
 {
 	private static Statement stmt;
 	
-	public dbStuffer() throws IOException, SQLException
+	public dbStuffer()
 	{
 		try
 		{
 			Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.1.16:3306/crawler?useSSL=false", "joker", "alpine"); // MySQL
 			stmt = conn.createStatement();
 		}
-		catch(SQLException IOEception)
+		catch(SQLException  SQLException)
 		{
 			System.out.println("Error detected @ dbStuffer - main constructor");
 		}
@@ -41,33 +41,43 @@ public class dbStuffer
 		}
 	}
 	
-	public boolean queryDB(String specific) throws SQLException, IOException
+	public boolean queryDB(String specific)
 	{
-		ArrayList<String> myArr = new ArrayList<String>();
-		String strSelect = "select * from crawled where url = '" + specific + "'";
-		ResultSet rset = stmt.executeQuery(strSelect);
 		boolean flag = false;
-		
-		while(rset.next())
+		try
 		{
-			//	String url = rset.getString("url");
-			//	System.out.println("URL >> " + url);
-			//	myArr.add(url);
-			flag = true;
-		}
-		
-//		for(int i=0; !myArr.isEmpty() && i<myArr.size(); i++)
-//		{
-//			flag = false;
-//			if(myArr.get(i).contains((specific)))
-//			{
-//				flag = true;
-//			}
-//			else
+			ArrayList<String> myArr = new ArrayList<String>();
+			String strSelect = "select * from crawled where url = '" + specific + "'";
+			//	String strSelect = "select * from crawled";
+			ResultSet rset = stmt.executeQuery(strSelect);
+			
+			while(rset.next())
+			{
+				//	String url = rset.getString("url");
+				//	System.out.println("URL >> " + url);
+				//	myArr.add(url);
+				flag = true;
+			}
+			
+//			for(int i=0; !myArr.isEmpty() && i<myArr.size(); i++)
 //			{
 //				flag = false;
+//				if(myArr.get(i).contains((specific)))
+//				{
+//					flag = true;
+//				}
+//				else
+//				{
+//					flag = false;
+//				}
 //			}
-//		}
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage() + " >> Error detected @ dbStuffer - queryDB method");
+		}
+		
+		
 		return flag;
 	}
 }

@@ -17,57 +17,71 @@ public class exe
 {
 	private static ArrayList<mainCarWrapper> container = new ArrayList<mainCarWrapper>();
 	
-	public static void collate(String url) throws IOException, SQLException
+	public static void collate(String url)
 	{
-		//	Read in the fucking URLs n Pass them to crawler to crawl for fucking shite
-		crawler crawl = new crawler(url);
-		dbStuffer dbStuff = new dbStuffer();
-		
-		ArrayList<mainCarWrapper> allCarObj = crawl.getCarObjects();
-		
-		for(int i=0; i<allCarObj.size(); i++)
+		try
 		{
-			if(dbStuff.queryDB(allCarObj.get(i).printURL()) != true)
+			//	Read in the fucking URLs n Pass them to crawler to crawl for fucking shite
+			crawler crawl = new crawler(url);
+			dbStuffer dbStuff = new dbStuffer();
+			
+			ArrayList<mainCarWrapper> allCarObj = crawl.getCarObjects();
+			
+			for(int i=0; i<allCarObj.size(); i++)
 			{
-				//	If the DB doesn't contain the URLs from the crawled URLs
-				//	Store into DB and send it to User 
-				if(url.contains("Toyota") && allCarObj.get(i).printCar().contains("Toyota"))
+				if(dbStuff.queryDB(allCarObj.get(i).printURL()) != true)
 				{
-					//	System.out.println("Statements wrote >> " + dbStuff.insertSQL(allCarObj.get(i).printURL()));
-					dbStuff.insertSQL(allCarObj.get(i).printURL().trim());
-					container.add(allCarObj.get(i));
-					System.out.println(i + " Toyotas");
+					//	If the DB doesn't contain the URLs from the crawled URLs
+					//	Store into DB and send it to User 
+					if(url.contains("Toyota") && allCarObj.get(i).printCar().contains("Toyota"))
+					{
+						//	System.out.println("Statements wrote >> " + dbStuff.insertSQL(allCarObj.get(i).printURL()));
+						dbStuff.insertSQL(allCarObj.get(i).printURL().trim());
+						container.add(allCarObj.get(i));
+						System.out.println(i + " Toyotas");
+					}
+					else if(url.contains("Honda") && allCarObj.get(i).printCar().contains("Honda"))	
+					{
+						dbStuff.insertSQL(allCarObj.get(i).printURL().trim());
+						container.add(allCarObj.get(i));
+						System.out.println(i + " Hondas");
+					}
+					
 				}
-				else if(url.contains("Honda") && allCarObj.get(i).printCar().contains("Honda"))	
-				{
-					dbStuff.insertSQL(allCarObj.get(i).printURL().trim());
-					container.add(allCarObj.get(i));
-					System.out.println(i + " Hondas");
-				}
-				
+				//	If not, ignore the URLs
 			}
-			//	If not, ignore the URLs
+		}
+		catch(Exception se)
+		{
+			System.err.println(se.getMessage() + " occurred @ exe - collate method");
 		}
 	}
 	
-	public static void sendMail() throws MessagingException, AddressException
+	public static void sendMail()
 	{
-		notifier not = new notifier();
-		not.setRecipient("farisoft@gmail.com");
-		not.setRecipient("russellsg888@gmail.com");
-		not.setSubj("New Car Results");
-		not.setBody("<strong>Greetings from Farath's Crawler,</strong><br>");
-			
-		for(int k=0; k<container.size(); k++)
+		try
 		{
-			not.setBody("<br>"+container.get(k).printCar() + " -> " + "http://www.sgcarmart.com/used_cars/" +container.get(k).printURL());
-			not.setBody("<br>");
-		}
-	
-		not.setBody("</br>END OF MESSAGE");
+			notifier not = new notifier();
+			not.setRecipient("farisoft@gmail.com");
+			not.setRecipient("russellsg888@gmail.com");
+			not.setSubj("New Car Results");
+			not.setBody("<strong>Greetings from Farath's Crawler,</strong><br>");
+				
+			for(int k=0; k<container.size(); k++)
+			{
+				not.setBody("<br>"+container.get(k).printCar() + " -> " + "http://www.sgcarmart.com/used_cars/" +container.get(k).printURL());
+				not.setBody("<br>");
+			}
 		
-		not.assign();
-		not.sendmail();
+			not.setBody("</br>END OF MESSAGE");
+			
+			not.assign();
+			not.sendmail();
+		}
+		catch(Exception ae)
+		{
+			System.err.println(ae.getMessage() + " occurred @ exe - sendMail method");
+		}		
 	}
 	
 	
@@ -81,7 +95,7 @@ public class exe
 		
 		try
 		{
-			input = new FileInputStream("url.properties");
+			input = new FileInputStream("/usr/local/bin/url.properties");
 			prop.load(input);
 			
 			collate(prop.getProperty("com.firstURL"));
@@ -90,7 +104,7 @@ public class exe
 		}
 		catch(Exception e)
 		{
-			System.err.println(" @ exe.main");
+			System.err.println(e.getMessage() + " @ exe.main");
 		}
 	}
 }
