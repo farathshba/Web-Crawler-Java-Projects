@@ -12,7 +12,8 @@ public class dbStuffer
 	{
 		try
 		{
-			Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.1.16:3306/crawler?useSSL=false", "joker", "alpine"); // MySQL
+			//	Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.1.2:3306/crawler?useSSL=false", "joker", "alpine"); // MySQL
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/crawler?useSSL=false", "root", "alpine"); // MySQL
 			stmt = conn.createStatement();
 		}
 		catch(SQLException  SQLException)

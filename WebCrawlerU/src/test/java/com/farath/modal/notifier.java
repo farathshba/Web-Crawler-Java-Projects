@@ -30,6 +30,9 @@ public class notifier
 	{
 		System.out.println("\n 1st ===> setup Mail Server Properties..");
 		mailServerProperties = System.getProperties();
+//		mailServerProperties.put("mail.smtp.port", "587");
+//		mailServerProperties.put("mail.smtp.auth", "true");
+//		mailServerProperties.put("mail.smtp.starttls.enable", "true");
 		mailServerProperties.put("mail.smtp.port", "587");
 		mailServerProperties.put("mail.smtp.auth", "true");
 		mailServerProperties.put("mail.smtp.starttls.enable", "true");
@@ -76,7 +79,8 @@ public class notifier
 		 
 				// Enter your correct gmail UserID and Password
 				// if you have 2FA enabled then provide App Specific Password
-				transport.connect("smtp.gmail.com", "MdAnfalAkkram@gmail.com", "qpwoei10");
+				//transport.connect("smtp.gmail.com", "MdAnfalAkkram@gmail.com", "qpwoei10");
+				transport.connect("smtp.gmail.com", "farisoft@gmail.com", "dvzzrnkqsmxavzui");
 				transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
 				transport.close();
 				flag = true;

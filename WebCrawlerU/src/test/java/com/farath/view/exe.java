@@ -21,7 +21,7 @@ public class exe
 	{
 		try
 		{
-			//	Read in the fucking URLs n Pass them to crawler to crawl for fucking shite
+			//	Read in the URLs and Pass them to CRAWLER function to crawl for Shit required
 			crawler crawl = new crawler(url);
 			dbStuffer dbStuff = new dbStuffer();
 			
@@ -85,17 +85,17 @@ public class exe
 	}
 	
 	
+	//	--	Program starts from here
 	public static void main(String[] args)
 	{
-		//	Read in the properties file
+		//	Reads in the PROPERTIES file
 		Properties prop = new Properties();
 		InputStream input = null;
-		
-		notifier not = new notifier();
 		
 		try
 		{
 			input = new FileInputStream("/usr/local/bin/url.properties");
+			//	input = new FileInputStream("url.properties");
 			prop.load(input);
 			
 			collate(prop.getProperty("com.firstURL"));
